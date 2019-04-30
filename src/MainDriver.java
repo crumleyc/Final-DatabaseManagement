@@ -10,6 +10,8 @@ public class MainDriver {
 		String firstnName = "";
 		String lastName = "";
 		String playerName = "";
+		String teamName = "";
+		String teamYear = "";
 		DBHelper dao = new DBHelper();
 		
 		while (command != 'q') {
@@ -19,6 +21,7 @@ public class MainDriver {
 			System.out.println("(c) World Series analysis");
 			System.out.println("(d) MVP analysis");
 			System.out.println("(s) PlayerID search by last name");
+			System.out.println("(t) Search based on team name and year");
 			System.out.println("(q) Quit the program");
 			System.out.print("\nEnter command here: ");
 			command = keyboard.next().charAt(0);
@@ -44,6 +47,13 @@ public class MainDriver {
 					System.out.print("Enter a last name: ");
 					playerName = keyboard.next();
 					dao.getPlayerID(playerName);
+					break;
+				case 't':
+					System.out.print("Enter a team name: ");
+					teamName = keyboard.next();
+					System.out.print("Enter a year: ");
+					teamYear = keyboard.next();
+					dao.getTeamInfo(teamName, teamYear);
 					break;
 				case 'q':
 					System.out.println("Exiting program...");

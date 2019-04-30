@@ -12,6 +12,7 @@ public class DBHelper {
 	PreparedStatement getMVPAnalysis = null;
 	PreparedStatement getWorldSeriesAnalysis = null;
 	PreparedStatement getPlayerID = null;
+	PreparedStatement getTeamInfo = null;
 
 	public DBHelper() {
 		this.jdbcURL = "jdbc:mysql://localhost:3306/baseball?serverTimezone=UTC";
@@ -231,7 +232,37 @@ public class DBHelper {
 		finally {
 			try {
 				if (getMVPAnalysis != null) {
-					getMVPAnalysis.close();
+					getPlayerID.close();
+				}
+				if (rs != null) {
+					rs.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			}
+			catch (SQLException e) {
+				System.out.println(e.getClass().getName() +": " + e.getMessage());
+			}
+		}
+	}
+
+	public void getTeamInfo(String inputTeam, String inputYear){
+
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			conn = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
+			
+			getTeamInfo = conn.prepareStatement("select yearID, T.name, lgID, divID, T.Rank, G, W, L, R, H, HR, SO, FP, DivWin, WCWin, LgWin, WSWin from teams T where name like '%" + inputTeam + "%' and yearID = " + inputYear + ";");
+			rs = getTeamInfo.executeQuery();
+			printResultSet(rs);
+		} catch (Exception e) {
+			System.out.println(e.getClass().getName() +": " + e.getMessage());
+		}
+		finally {
+			try {
+				if (getMVPAnalysis != null) {
+					getTeamInfo.close();
 				}
 				if (rs != null) {
 					rs.close();
