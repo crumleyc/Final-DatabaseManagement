@@ -2,9 +2,10 @@
 
 Contents:
 1. Summary of classes
-2. Configuration instructions
-3. Use instructions
-
+2. Configuration instructions for [Eclipse](https://www.eclipse.org/downloads/)
+3. Configuration instructions for Command Line
+4. Use instructions
+---------------------------------
 1. Summary of classses
 
 The project is divided into three main Java classes: 
