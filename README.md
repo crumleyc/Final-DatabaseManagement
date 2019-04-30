@@ -15,7 +15,7 @@ Contents:
 
       * DBTablePrinter.java is an open-source helper class for outputting result sets into a clean, readable table format.
 
-2. Configuration Instructions.
+2. Configuration Instructions for Eclipse.
 
    2.1: Table Alterations
    If you have not yet done so, connect to your database with work bench, open the 'alterations.sql' file, and execute the script in order to add the primary key to the 'people' table. This script file will contain and keep track of any additional table alterations that we may need to make.
@@ -33,7 +33,18 @@ Contents:
    2.3: Specify MySQL credentials
     Open DBHelper.java and modify the class constructor to include your databasename, your MySQL user name, and your MySQL password.
 
-3. Use instructions.
+3. Configuration Instrctions for Command Line
+
+    3.1: Java 8 and JDK installed to test: `$javac --version` AND/OR `$java --version`
+    
+    3.2: You may also need to add the mysql connector to the classpath if it is not already. The connector JAR is located in the project's lib directory.
+    
+    3.3: Compiling:
+      - `$ javac -cp .:lib/mysql-connector-java-8.0.15.jar -d bin/ src/*.java`
+      
+    3.4: Running:
+      - `$ java -cp .:lib/mysql-connector-java-8.0.15.jar:./bin/ MainDriver`
+4. Use instructions.
 
    After configuring the project, run the project as a Java application. Currently, two analysis operations have been implemented, and the commands to run them are displayed in the menu.
 
