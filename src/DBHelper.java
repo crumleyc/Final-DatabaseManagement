@@ -11,11 +11,12 @@ public class DBHelper {
 	PreparedStatement getBelowAvgWeightHRs = null;
 	PreparedStatement getMVPAnalysis = null;
 	PreparedStatement getWorldSeriesAnalysis = null;
+	PreparedStatement getPlayerID = null;
 
 	public DBHelper() {
-		this.jdbcURL = "jdbc:mysql://localhost:3306/lahmansbaseballdb";
+		this.jdbcURL = "jdbc:mysql://localhost:3306/baseball?serverTimezone=UTC";
 		this.jdbcUsername = "root";
-		this.jdbcPassword = "nullmansland";
+		this.jdbcPassword = "Maxblake4!";
 	}
 
 	public void getHistoricalAvgComparison(String playerID) {
@@ -195,6 +196,36 @@ public class DBHelper {
 			System.out.println(e.getClass().getName() +": " + e.getMessage());
 		} 
 		catch (SQLException e) {
+			System.out.println(e.getClass().getName() +": " + e.getMessage());
+		}
+		finally {
+			try {
+				if (getMVPAnalysis != null) {
+					getMVPAnalysis.close();
+				}
+				if (rs != null) {
+					rs.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			}
+			catch (SQLException e) {
+				System.out.println(e.getClass().getName() +": " + e.getMessage());
+			}
+		}
+	}
+
+	public void getPlayerID(String input){
+
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			conn = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
+
+			getPlayerID = conn.prepareStatement("select playerID, nameFirst, nameLast from people where nameLast like '%" + input + "%';");
+			rs = getPlayerID.executeQuery();
+			printResultSet(rs);
+		} catch (Exception e) {
 			System.out.println(e.getClass().getName() +": " + e.getMessage());
 		}
 		finally {
