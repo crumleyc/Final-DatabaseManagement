@@ -5,7 +5,7 @@ Contents:
 2. Configuration instructions
 3. Use instructions
 
-1. Summary of classses
+--1. Summary of classses
 
 The project is divided into three main Java classes: 
 MainDriver.java contains the main method and a simple console UI, with limited error handling
@@ -14,7 +14,7 @@ DBHelper.java contains all of the JDBC data access methods and queries.
 
 DBTablePrinter.java is an open-source helper class for outputting result sets into a clean, readable table format.
 
-2. Configuration Instructions.
+-2. Configuration Instructions.
 
 2.1: Table Alterations
 If you have not yet done so, connect to your database with work bench, open the 'alterations.sql' file, and execute the script in order to add the primary key to the 'people' table. This script file will contain and keep track of any additional table alterations that we may need to make.
