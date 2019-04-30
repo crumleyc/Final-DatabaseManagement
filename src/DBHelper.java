@@ -9,6 +9,8 @@ public class DBHelper {
 	PreparedStatement compareHistoricalAvg = null;
 	PreparedStatement getAboveAvgWeightHRs = null;
 	PreparedStatement getBelowAvgWeightHRs = null;
+	PreparedStatement getMVPAnalysis = null;
+	PreparedStatement getWorldSeriesAnalysis = null;
 
 	public DBHelper() {
 		this.jdbcURL = "jdbc:mysql://localhost:3306/lahmansbaseballdb";
@@ -115,6 +117,90 @@ public class DBHelper {
 				}
 				if (getBelowAvgWeightHRs != null) {
 					getBelowAvgWeightHRs.close();
+				}
+				if (rs != null) {
+					rs.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			}
+			catch (SQLException e) {
+				System.out.println(e.getClass().getName() +": " + e.getMessage());
+			}
+		}
+	}
+	
+	public void getWorldSeriesAnalysis(){
+
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			conn = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
+
+			getWorldSeriesAnalysis = conn.prepareStatement("with averages (yearID, BA) " +
+			"as (select distinct yearID, avg(H/AB) from teams group by yearID), " +
+			"WorldSeries (yearID, teamID, name, franchName, hits, AB) " +
+			"as (select yearID, teamID, name, franchName, H, AB from teams T, teamsfranchises F where T.franchID = F.franchID and T.WSWin = 'Y') " +
+			"select yearID, teamID, name, franchName, hits, AB, (hits/AB) teamBA, BA from averages natural join WorldSeries where (hits/AB) < BA;"
+			);
+
+			rs = getWorldSeriesAnalysis.executeQuery();
+			System.out.print("List of World Series winning teams who batted worse than the league average that year.");
+			printResultSet(rs);
+
+		} catch (ClassNotFoundException e) {
+			System.out.println(e.getClass().getName() +": " + e.getMessage());
+		} 
+		catch (SQLException e) {
+			System.out.println(e.getClass().getName() +": " + e.getMessage());
+		}
+		finally {
+			try {
+				if (getWorldSeriesAnalysis != null) {
+					getWorldSeriesAnalysis.close();
+				}
+				if (rs != null) {
+					rs.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			}
+			catch (SQLException e) {
+				System.out.println(e.getClass().getName() +": " + e.getMessage());
+			}
+		}
+	}
+
+    public void getMVPAnalysis(){
+
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			conn = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
+
+			getMVPAnalysis = conn.prepareStatement("with averagesSecond (yearID, lgBA, lgSlugging) " +
+                "as (select distinct yearID, avg(H/AB), avg(((H + (2 * 2B) + (3 * 3B) + (4 * HR))/AB)) from teams group by yearID), " +
+                "MVPBatting (playerID, yearID, H, 2B, 3B, HR, AB) " +
+                "as (select playerID, yearID, sum(H), sum(2B), sum(3B), sum(HR), sum(AB) from batting B natural join awardsplayers A where awardID = 'Most Valuable Player' group by B.playerID, B.yearID), " +
+                "MVPBattingPlus (yearID, nameFirst, nameLast, MVPBA, MVPSlugging) " +
+                "as (select yearID, nameFirst, nameLast, (H/AB), ((H + (2 * 2B) + (3 * 3B) + (4 * HR))/AB) from MVPBatting M, people P where P.playerID = M.playerID order by yearID DESC) " +
+                "select * from MVPBattingPlus natural join averagesSecond order by yearID DESC;"
+			);
+
+			rs = getMVPAnalysis.executeQuery();
+			System.out.print("List of the MVP winners of each year and how their batting stats compare to the rest of the league.");
+			printResultSet(rs);
+
+		} catch (ClassNotFoundException e) {
+			System.out.println(e.getClass().getName() +": " + e.getMessage());
+		} 
+		catch (SQLException e) {
+			System.out.println(e.getClass().getName() +": " + e.getMessage());
+		}
+		finally {
+			try {
+				if (getMVPAnalysis != null) {
+					getMVPAnalysis.close();
 				}
 				if (rs != null) {
 					rs.close();
