@@ -165,15 +165,18 @@ public class DBHelper {
 		}
 	}
 
-	public void getPlayerSalaryStats(String playerID1){
+	public void getPlayerSalaryStats(String playerID){
 		try{
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
 
 			// Initialize prepared statements
-			getSalaryStats = conn.prepareStatement("SELECT * FROM batting;");
+			getSalaryStats = conn.prepareStatement("SELECT playerID, salary, yearID " +
+																						"FROM salaries " +
+																						"WHERE playerID= ? ;");
 
 			//Grab query resuls of a player's salary and performance stats
+			getSalaryStats.setString(1,playerID);
 			rs = getSalaryStats.executeQuery();
 			printResultSet(rs);
 		}

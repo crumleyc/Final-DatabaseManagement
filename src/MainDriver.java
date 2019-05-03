@@ -19,6 +19,7 @@ public class MainDriver {
 			System.out.println("(b) Show the top 10 average homerun stats for players above and below average weight.");
 			System.out.println("(c) World Series analysis");
 			System.out.println("(d) MVP analysis");
+			System.out.println("(e) Get previous annual salaries for a player");
 			System.out.println("(s) Search for player's playerID by last name.");
 			System.out.println("(t) Search based on team name and year");
 			System.out.println("(q) Quit the program");
@@ -41,6 +42,12 @@ public class MainDriver {
 					break;
 				case 'd':
 					dao.getMVPAnalysis();
+					break;
+				case 'e':
+					System.out.print("Enter a playerID: ");
+					playerID1 = keyboard.next();
+					System.out.println("stored string");
+					dao.getPlayerSalaryStats(playerID1);
 					break;
 				case 's':
 					System.out.println("Enter player's last name: ");
